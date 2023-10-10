@@ -13,13 +13,12 @@ public class WikiImageCrawler {
 
     public static void main(String[] args) {
 
-        // take category as user's input
-        System.out.println("Enter the name of the category:");
+        // take user's input
         var in = new Scanner(System.in);
+        System.out.println("Enter the name of Wikimedia category page:");
         var category = in.nextLine();
-
-        // depending on this variable the image URL will be either treated as "flag" or as "coat_of_arms"
-        var flags = category.contains("flags");
+        System.out.println("Enter the JSON key for retrieved image:");
+        var imageKey = in.nextLine();
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             // fetch Wikipedia category page
@@ -65,11 +64,7 @@ public class WikiImageCrawler {
                         // create JSON data
                         JSONObject jsonData = new JSONObject();
                         jsonData.put("name", file);
-                        if (flags) {
-                            jsonData.put("flag", url);
-                        } else {
-                            jsonData.put("coat_of_arms", url);
-                        }
+                        jsonData.put(imageKey, url);
                         jsonDataArray.put(jsonData);
                     });
                 } catch (Exception ex) {
