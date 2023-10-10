@@ -1,9 +1,13 @@
 package cz.aloisseckar;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.http.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class WikiImageCrawler {
 
@@ -35,6 +39,8 @@ public class WikiImageCrawler {
 
             System.out.println("Fetched " + files.size() + " files");
 
+            System.out.println("Getting image paths...");
+            JSONArray jsonDataArray = new JSONArray();
             files.forEach(file -> {
                 try {
                     // sanitize input
@@ -56,22 +62,32 @@ public class WikiImageCrawler {
                         // target URL is presented inside "url" attribute of returned JSON
                         var url = line.substring(line.indexOf("\"url\":\"") + 7, line.indexOf("\",\"descriptionurl\""));
 
-                        // print JSON-like structure to the output
-                        // TODO directly modify cities.json data
-                        System.out.println("{");
-                        System.out.println("  \"name\" : \"" + file + "\",");
+                        // create JSON data
+                        JSONObject jsonData = new JSONObject();
+                        jsonData.put("name", file);
                         if (flags) {
-                            System.out.println("  \"flag\" : \"" + url + "\"");
+                            jsonData.put("flag", url);
                         } else {
-                            System.out.println("  \"coat_of_arms\" : \"" + url + "\"");
+                            jsonData.put("coat_of_arms", url);
                         }
-                        System.out.println("}");
+                        jsonDataArray.put(jsonData);
                     });
                 } catch (Exception ex) {
                     System.err.println(file);
                     System.err.println(ex.getMessage());
                 }
             });
+            System.out.println("Image data retrieved");
+
+            // write output into JSON file
+            System.out.println("Creating JSON output...");
+            try (FileWriter jsonFile = new FileWriter("output.json")) {
+                jsonDataArray.write(jsonFile, 2, 0);
+                jsonFile.flush();
+                System.out.println("File 'output.json' created");
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
 
         } catch (Exception ex) {
             System.err.println(ex.getMessage());

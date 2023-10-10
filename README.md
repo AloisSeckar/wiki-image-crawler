@@ -8,7 +8,7 @@ Originally being used for help to fetch data for [https://github.com/ByMykel/spa
 
 On startup the program prompts for the name of the image category page - for example `SVG_flags_of_municipalities_of_Álava-Araba` (copy the name from URL, don't use the Wiki page title). 
 
-Then the images from given category are the original image URL is retrieved via Wikimedia API for each entry. The results are immediately displayed as JSON-like structure in the console. For example:
+Then the images from given category are the original image URL is retrieved via Wikimedia API for each entry. The results are turned into JSON structure, for example:
 
 ```json
 {
@@ -18,6 +18,8 @@ Then the images from given category are the original image URL is retrieved via 
 ```
 
 The program automatically differs between `flag` and `coat_of_arms` key based on the category name.
+
+The retrieved data are written into `output.json` file, which is created in current working directory.
 
 ## Release
 

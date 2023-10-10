@@ -26,3 +26,6 @@ nbactions.xml
 
 # IDEA
 .idea
+
+# crawler's JSON output
+output.json
