@@ -1,10 +1,12 @@
 package cz.aloisseckar;
 
 import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,6 +17,7 @@ public class WikiImageCrawler {
 
         // take user's input
         var in = new Scanner(System.in);
+        System.out.println("Please be aware that some terminals may corrupt non-ASCII characters because of different encoding than UTF-8");
         System.out.println("Enter the name of Wikimedia category page:");
         var category = in.nextLine();
         System.out.println("Enter the JSON key for retrieved image:");
@@ -22,9 +25,9 @@ public class WikiImageCrawler {
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             // fetch Wikipedia category page
-            var categoryRequest = HttpRequest.newBuilder()
-                    .uri(URI.create("https://commons.wikimedia.org/wiki/Category:" + category))
-                    .build();
+            var url = "https://commons.wikimedia.org/wiki/Category:" + URLEncoder.encode(category, StandardCharsets.UTF_8).replaceAll("\\+", "_");
+            System.out.println("Fetching data from " + url);
+            var categoryRequest = HttpRequest.newBuilder().uri(URI.create(url)).build();
             var categoryResponse = client.send(categoryRequest, HttpResponse.BodyHandlers.ofString());
 
             // look for all relevant image entries on the category page
@@ -59,12 +62,12 @@ public class WikiImageCrawler {
                         // System.out.println(normalizedFile); System.out.println(line);
 
                         // target URL is presented inside "url" attribute of returned JSON
-                        var url = line.substring(line.indexOf("\"url\":\"") + 7, line.indexOf("\",\"descriptionurl\""));
+                        var imageUrl = line.substring(line.indexOf("\"url\":\"") + 7, line.indexOf("\",\"descriptionurl\""));
 
                         // create JSON data
                         JSONObject jsonData = new JSONObject();
                         jsonData.put("name", file);
-                        jsonData.put(imageKey, url);
+                        jsonData.put(imageKey, imageUrl);
                         jsonDataArray.put(jsonData);
                     });
                 } catch (Exception ex) {
