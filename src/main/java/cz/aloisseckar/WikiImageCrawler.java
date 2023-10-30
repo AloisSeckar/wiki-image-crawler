@@ -25,7 +25,11 @@ public class WikiImageCrawler {
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             // fetch Wikipedia category page
-            var url = "https://commons.wikimedia.org/wiki/Category:" + URLEncoder.encode(category, StandardCharsets.UTF_8).replaceAll("\\+", "_");
+            var url = "https://commons.wikimedia.org/w/index.php?title=Category:" + URLEncoder.encode(category, StandardCharsets.UTF_8)
+                // some extra processing in case special characters are used
+                .replaceAll("\\+", "_")
+                .replaceAll("%26","&")
+                .replaceAll("%3D","=");
             System.out.println("Fetching data from " + url);
             var categoryRequest = HttpRequest.newBuilder().uri(URI.create(url)).build();
             var categoryResponse = client.send(categoryRequest, HttpResponse.BodyHandlers.ofString());
