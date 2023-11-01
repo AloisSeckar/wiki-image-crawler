@@ -7,6 +7,8 @@ import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +25,9 @@ public class WikiImageCrawler {
         var imageKey = in.nextLine();
         System.out.println("Enter the JSON output file name:");
         var outputName = in.nextLine();
+        if (StringUtils.isBlank(outputName)) {
+            outputName = imageKey;
+        }
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             // fetch Wikipedia category page
