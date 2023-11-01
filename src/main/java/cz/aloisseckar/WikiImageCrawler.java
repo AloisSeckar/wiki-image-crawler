@@ -6,7 +6,6 @@ import java.net.URLEncoder;
 import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +21,8 @@ public class WikiImageCrawler {
         var category = in.nextLine();
         System.out.println("Enter the JSON key for retrieved image:");
         var imageKey = in.nextLine();
+        System.out.println("Enter the JSON output file name:");
+        var outputName = in.nextLine();
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             // fetch Wikipedia category page
@@ -83,10 +84,10 @@ public class WikiImageCrawler {
 
             // write output into JSON file
             System.out.println("Creating JSON output...");
-            try (FileWriter jsonFile = new FileWriter("output.json")) {
+            try (FileWriter jsonFile = new FileWriter(outputName + ".json")) {
                 jsonDataArray.write(jsonFile, 2, 0);
                 jsonFile.flush();
-                System.out.println("File 'output.json' created");
+                System.out.println("File '" + outputName + ".json' created");
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
             }

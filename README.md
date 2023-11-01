@@ -6,7 +6,7 @@ Originally being used for help to fetch data for [https://github.com/ByMykel/spa
 
 ## Usage
 
-On startup the program prompts for the name of the Wikimedia image category page - for example `GitHub_logos`. The exact URL being called is `https://commons.wikimedia.org/w/index.php?title=<<input>>`. The input gets encoded into Wiki-compatible URL, however with some terminals (like Windows `cmd`) it may fail to produce a valid Wikimedia category name with non-ASCII characters. Then the next prompt asks for JSON key for retrieved image URL.
+On startup the program prompts for the name of the Wikimedia image category page - for example `GitHub_logos`. The exact URL being called is `https://commons.wikimedia.org/w/index.php?title=<<input>>`. The input gets encoded into Wiki-compatible URL, however with some terminals (like Windows `cmd`) it may fail to produce a valid Wikimedia category name with non-ASCII characters. Then the next prompt asks for JSON key for retrieved image URL and the last one for the name of the generated JSON output file.
 
 Given the provided category name is valid `commons.wikimedia.org` category, the program will then retrieve the original image URL via Wikimedia API for every image entry located in this category. The entries are located via `galleryfilename galleryfilename-truncate` CSS class selectors. The API call being made is `https://commons.wikimedia.org/w/api.php?action=query&titles=File:<<image_name>>&prop=imageinfo&iiprop=url&format=json`
 

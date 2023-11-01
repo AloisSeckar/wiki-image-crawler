@@ -28,4 +28,4 @@ nbactions.xml
 .idea
 
 # crawler's JSON output
-output.json
+*.json
